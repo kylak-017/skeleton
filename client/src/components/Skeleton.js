@@ -1,8 +1,7 @@
 import React from "react";
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
 
-import "../../utilities.css";
-import "./Skeleton.css";
+// import "../../utilities.css";
 
 //TODO: REPLACE WITH YOUR OWN CLIENT_ID
 const GOOGLE_CLIENT_ID = "FILL ME IN";

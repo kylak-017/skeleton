@@ -59,7 +59,11 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx"],
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+    },
+    extensions: ["*", ".js", ".jsx"]
+    
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {

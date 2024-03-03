@@ -18,11 +18,9 @@
 const validator = require("./validator");
 validator.checkSetup();
 
-//allow us to use process.ENV
-require("dotenv").config();
-
 //import libraries needed for the webserver to work!
 const http = require("http");
+const bodyParser = require("body-parser"); // allow node to automatically parse POST body requests as JSON
 const express = require("express"); // backend framework for our node server.
 const session = require("express-session"); // library that stores info about each connected user
 const mongoose = require("mongoose"); // library to connect to MongoDB
@@ -33,15 +31,15 @@ const auth = require("./auth");
 
 // socket stuff
 const socketManager = require("./server-socket");
+mongoose.set('strictQuery', true); // or false, depending on your preference
+
 
 // Server configuration below
-// TODO change connection URL after setting up your team database
-const mongoConnectionURL = process.env.MONGO_SRV;
+// TODO change connection URL after setting up your own database
+const mongoConnectionURL =
+"mongodb+srv://kyurikim0174:U9MHGGbc6RTj3nhO@cluster0.hxnjhiw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // TODO change database name to the name you chose
-const databaseName = "FILL_ME_IN";
-
-// mongoose 7 warning
-mongoose.set("strictQuery", false);
+const databaseName = "catbook";
 
 // connect to mongodb
 mongoose
@@ -57,18 +55,30 @@ mongoose
 const app = express();
 app.use(validator.checkRoutes);
 
-// allow us to process POST requests
-app.use(express.json());
+// set up bodyParser, which allows us to process POST requests
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // set up a session, which will persist login data across requests
 app.use(
   session({
-    // TODO: add a SESSION_SECRET string in your .env file, and replace the secret with process.env.SESSION_SECRET
     secret: "session-secret",
     resave: false,
     saveUninitialized: false,
   })
 );
+
+let participants = [];
+
+app.get('/add-participant', (req, res) => {
+  const clientId = req.query.clientId;
+  if (clientId) {
+    participants.push(clientId);
+    res.json({ success: true, participants });
+  } else {
+    res.status(400).json({ success: false, message: 'No clientId provided' });
+  }
+});
 
 // this checks if the user is logged in, and populates "req.user"
 app.use(auth.populateCurrentUser);
