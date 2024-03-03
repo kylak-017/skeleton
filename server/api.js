@@ -11,7 +11,6 @@ const express = require("express");
 
 // import models so we can interact with the database
 const Story = require("./models/story");
-const Comment = require("./models/comment");
 const User = require("./models/user");
 
 
@@ -62,9 +61,9 @@ router.post("/initsocket", (req, res) => {
 });
 
 
-const express = require('express');
+
 const app = express();
-const User = require('./models/user'); // Assuming you have a User model set up
+
 
 
 // anything else falls to this "not found" case

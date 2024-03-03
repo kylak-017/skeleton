@@ -36,10 +36,10 @@ mongoose.set('strictQuery', true); // or false, depending on your preference
 
 // Server configuration below
 // TODO change connection URL after setting up your own database
-const mongoConnectionURL =
+const mongoConnectionURL = 
 "mongodb+srv://kyurikim0174:U9MHGGbc6RTj3nhO@cluster0.hxnjhiw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // TODO change database name to the name you chose
-const databaseName = "catbook";
+const databaseName = "Cluster0";
 
 // connect to mongodb
 mongoose
@@ -111,18 +111,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-const express = require('express');
-app = express();
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const imgSchema = require('./model.js');
+
+const imgSchema = require('./models/story.js');
 const fs = require('fs');
-const path = require('path');
+
 app.set("view engine", "ejs");
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGO_URL)
-.then(() => console.log("DB Connected"));
+// mongoose.connect(process.env.MONGO_URL)
+// .then(() => console.log("DB Connected"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -169,12 +166,11 @@ app.post('/', upload.single('image'), (req, res) => {
 	});
 });
 
-port = process.env.PORT || '3000';
-app.listen(port, err => {
-	if (err)
-		throw err;
-	console.log('Server listening on port', port);
-});
+// app.listen(port, err => {
+// 	if (err)
+// 		throw err;
+// 	console.log('Server listening on port', port);
+// });
 
 
 
@@ -208,12 +204,12 @@ app.get('/api/leaderboard', (req, res) => {
 });
 
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
+// app.listen(3000, () => {
+//   console.log('Server running on port 3000');
+// });
 
 // hardcode port to 3000 for now
-const port = 3000;
+const port = process.env.PORT || '3000';
 const server = http.Server(app);
 socketManager.init(server);
 

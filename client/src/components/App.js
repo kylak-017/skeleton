@@ -8,24 +8,25 @@ import { Routes, Route } from "react-router-dom";
 
 import jwt_decode from "jwt-decode";
 
-import NotFound from "./pages/NotFound.js";
-import Skeleton from "./pages/Skeleton.js";
+
 
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
+import Leaderboard from "./modules/Leaderboard.js";
+import { NewPostInput } from "./modules/NewPostInput.js";
 
 /**
  * Define the "App" component
  */
 
-require('dotenv').config();
+// require('dotenv').config();
 
 // Now you can require other modules and use the loaded environment variables
-const express = require('express');
-const mongoose = require('mongoose');
+// const express = require('express');
+// const mongoose = require('mongoose');
 
 const App = () => {
   const [userId, setUserId] = useState(undefined);
@@ -55,6 +56,8 @@ const App = () => {
   };
 
   return (
+    <>
+    <NavBar />
     <Routes>
       <Route
         path="/"
@@ -65,10 +68,32 @@ const App = () => {
             handleLogout={handleLogout}
             userId={userId}
           />
-        }
-      />
+        }/>
+         <Route
+            path = "/Feed"
+            element = {
+              <Feed/>
+    
+
+            }
+            />
+
+         <Route
+            path = "/Leaderboard"
+            element = {
+              <Leaderboard/>
+            }
+            />
+
+        <Route
+            path = "/Profile"
+            element = {
+              <Profile/>
+            }
+            />
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </>
   );
 };
 

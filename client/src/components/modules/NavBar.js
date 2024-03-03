@@ -30,9 +30,6 @@ const NavBar = (props) => {
         <Link to="/Feed/" className="NavBar-link">
           Feed
         </Link>
-        <Link to="/Map/" className="NavBar-link">
-          Map
-        </Link>
         <Link to="/Leaderboard/" className="NavBar-link">
           Leaderboard
         </Link>

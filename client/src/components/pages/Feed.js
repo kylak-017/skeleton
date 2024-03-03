@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Card from "../modules/Card.js";
 import { NewStory } from "../modules/NewPostInput.js";
 
-import { get } from "../../server/utilities.js";
+import { get } from "../../utilities.js";
 
 const Feed = (props) => {
   const [stories, setStories] = useState([]);
@@ -38,10 +38,11 @@ const Feed = (props) => {
     ));
   } else {
     storiesList = <div>No stories!</div>;
+    {NewStory}
   }
   return (
     <>
-      {props.userId && <NewStory addNewStory={addNewStory} />}
+      {props.userId && <NewStory addNewStory={NewStory} />}
       {storiesList}
     </>
   );

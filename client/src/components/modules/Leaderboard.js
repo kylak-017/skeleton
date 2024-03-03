@@ -4,21 +4,27 @@ function Leaderboard() {
   const [leaders, setLeaders] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5050/api/leaderboard')
+    fetch('/api/leaderboard')
       .then(response => response.json())
-      .then(data => setLeaders(data));
+      .then(data => {
+        console.log(data); // Check the structure of the response
+        setLeaders(data);
+      });
   }, []);
 
+
   return (
-    <div>
-      <h1>Leaderboard</h1>
-      <ul>
-        {leaders.map((user, index) => (
-          <li key={index}>{user.username} - {user.xp} XP</li>
-        ))}
-      </ul>
-    </div>
-  );
+        <div>
+          <h1>Leaderboard</h1>
+          <ul>
+      {Array.isArray(leaders) && leaders.map((user, index) => (
+        <li key={index}>{user.username} - {user.xp} XP</li>
+      ))}
+    </ul>
+        </div>
+
+        
+      );
 }
 
 export default Leaderboard;
