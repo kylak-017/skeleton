@@ -1,0 +1,16 @@
+.Profile-avatarContainer {
+    padding: 0 35%;
+  }
+
+
+.Profile-name {
+    font-size: 40px;
+    font-weight: 300;
+
+}
+
+.Profile-xp{
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
