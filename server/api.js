@@ -13,7 +13,7 @@ const express = require("express");
 const Story = require("./models/story");
 const Comment = require("./models/comment");
 const User = require("./models/user");
-const Message = require("./models/message");
+
 
 // import authentication library
 const auth = require("./auth");
