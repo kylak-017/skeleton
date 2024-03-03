@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./modules/NavBar.js";
-import { Router } from "@reach/router";
 import Feed from "./pages/Feed.js";
 import NotFound from "./pages/NotFound.js";
 import Profile from "./pages/Profile.js";
-import Chatbook from "./pages/Chatbook.js";
-import Game from "./pages/Game.js";
-import LLM from "./pages/LLM.js";
+import Skeleton from "./Skeleton.js";
+import { Routes, Route } from "react-router-dom";
 
 import { socket } from "../client-socket.js";
 
@@ -51,8 +49,8 @@ const App = () => {
     // <> is like a <div>, but won't show
     // up in the DOM tree
     <>
-      <NavBar handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />
-      <div className="App-container">
+      {/* <NavBar handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} /> */}
+      {/* <div className="App-container">
         <Router>
           <Feed path="/" userId={userId} />
           <Profile path="/profile/:userId" />
@@ -61,7 +59,34 @@ const App = () => {
           <Map path="/map/" userId={userId} />
           <NotFound default />
         </Router>
-      </div>
+      </div> */}
+      <Routes>
+        <Route path="/" element={<Feed userId={userId}/>}/>
+        <Route path="/profile" element={<Skeleton
+            path="/"
+            handleLogin={handleLogin}
+            handleLogout={handleLogout}
+            userId={userId}
+          />}/>
+        <Route path="/leaderboard" element={<Skeleton
+            path="/"
+            handleLogin={handleLogin}
+            handleLogout={handleLogout}
+            userId={userId}
+          />}/>
+         <Route path="/map" element={<Skeleton
+            path="/"
+            handleLogin={handleLogin}
+            handleLogout={handleLogout}
+            userId={userId}
+          />}/>
+        <Route path="/feed" element={<Skeleton
+            path="/"
+            handleLogin={handleLogin}
+            handleLogout={handleLogout}
+            userId={userId}
+          />}/>
+      </Routes>
     </>
   );
 };
