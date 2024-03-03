@@ -1,0 +1,49 @@
+.Card-container {
+    border: var(--darkgrey) 1px solid;
+    border-radius: var(--xs);
+    margin-top: var(--m);
+  }
+  
+  .Card-container:first-of-type {
+    margin-top: var(--l);
+  }
+  
+  .Card-story,
+  .Card-commentSection {
+    padding: var(--m) var(--l);
+  }
+  
+  .Card-storyUser {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .Card-storyContent {
+    font-size: 40px;
+    margin: var(--s) 0 0;
+  }
+  
+  .Card-commentSection {
+    background-color: var(--grey);
+    border-top: 1px solid var(--darkgrey);
+  }
+  
+  .Card-commentBody {
+    margin: 0 0 var(--s);
+  }
+  
+  .Card-participantLog {
+    font-size: 40px;
+    margin: var(--s) 0 0;
+  }
+  
+  .Card-button {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
