@@ -10,7 +10,7 @@ const Feed = (props) => {
   // called when the "Feed" component "mounts", i.e.
   // when it shows up on screen
   useEffect(() => {
-    document.title = "News Feed";
+    document.title = "Cleanup Forum";
     get("/api/stories").then((storyObjs) => {
       let reversedStoryObjs = storyObjs.reverse();
       setStories(reversedStoryObjs);
@@ -34,8 +34,6 @@ const Feed = (props) => {
         creator_id={storyObj.creator_id}
         userId={props.userId}
         content={storyObj.content}
-        participants = {storyObj.participants}
-        cleanup_date = {storyObj.cleanup_date}
       />
     ));
   } else {

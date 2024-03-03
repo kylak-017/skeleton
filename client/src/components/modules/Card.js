@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useCallback } from 'react';
+import { get } from "../../utilities";
 
-
-
+import ImageUploader from "./ImageUploaader";
 
 import "./Card.css";
-import { name } from "file-loader";
 
 /**
  * Card is a component for displaying content like stories
@@ -15,50 +13,47 @@ import { name } from "file-loader";
  * @param {string} creator_name
  * @param {string} creator_id
  * @param {string} content of the story
- * @param {Array} participants 
- * @param {string} location
  */
 
 
 
-const Card = (props) => {
 
-  const addParticipant = (props) => {
+
+
+const Card = (props) => {
+    const [participants, setParticipants] = useState([]);
+  
     useEffect(() => {
-      get("/api/add-participant", { parent: props.participants }).then((participants) => {
+      get("/api/add-participant").then((participants) => {
         setParticipants(participants);
       });
     }, []);
 
-  // Replace `clientId` with the actual client ID and `your-server-url` with your server's URL
-  const clientId = req.query.clientId;
-  fetch(`http://localhost:5050/add-participant?clientId=${clientId}`)
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
-  console.log(participants)
-};
+  
 
-  // this gets called when the user pushes "Submit", so their
-  // post gets added to the screen right away
 
-  return (
-    <div className="Card-container">
-      <div className = "Card-button">
-        <button onClick={addEvent}>Join Cleanup</button>
-      </div>
-      <Story
-        _id={props._id}
-        creator_name={props.creator_name}
-        creator_id={props.creator_id}
-        content={props.content}
-        participants = {props.participants}
-        location = {props.location}
-        cleanup_date = {props.cleanup_date}
-      />
-      
-    </div>
-  );
+   
+
+    return (
+        <div className="Card-container">
+
+           <h4>Upload Image:{ImageUploader}</h4>
+
+          <SingleStory
+            _id={props._id}
+            post_id = {props.post_id}
+            creator_name={props.creator_name}
+            creator_id={props.creator_id}
+            trash_number = {props.trash_number}
+            participants = {props.participants}
+
+          />
+          
+          <button onClick={addParticipant}>Join</button>
+        </div>
+      );
+
+
 };
 
 export default Card;

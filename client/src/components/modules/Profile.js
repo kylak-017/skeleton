@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { get } from "../../utilities";
 
+import Card from "./Card";
+
 import "../../utilities.css";
 import "./Profile.css";
 
 const Profile = (props) => {
     const [xp, setXP] = useState(0);
+    const [event, setEvent] = useState([]);
     const[user, setUser] = useState();
 
 
@@ -32,6 +35,8 @@ return (
          <div className="Profile-subContainer u-textCenter">
           <h4 className="Profile-subTitle">XP</h4>
           <xp xp ={xp} />
+          <h4>When you complete a "story" on the "Feed", click on the button to increase your XP by 10!</h4>
+          <h4>Your Events: {Card}</h4>
         </div>
 
 

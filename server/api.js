@@ -38,22 +38,6 @@ router.post("/story", auth.ensureLoggedIn, (req, res) => {
   newStory.save().then((story) => res.send(story));
 });
 
-router.get("/comment", (req, res) => {
-  Comment.find({ parent: req.query.parent }).then((comments) => {
-    res.send(comments);
-  });
-});
-
-router.post("/comment", auth.ensureLoggedIn, (req, res) => {
-  const newComment = new Comment({
-    creator_id: req.user._id,
-    creator_name: req.user.name,
-    parent: req.body.parent,
-    content: req.body.content,
-  });
-
-  newComment.save().then((comment) => res.send(comment));
-});
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -77,25 +61,11 @@ router.post("/initsocket", (req, res) => {
   res.send({});
 });
 
-router.get("/chat", (req, res) => {
-  const query = { "recipient._id": "ALL_CHAT" };
-  Message.find(query).then((messages) => res.send(messages));
-});
 
-router.post("/message", auth.ensureLoggedIn, (req, res) => {
-  console.log(`Received a chat message from ${req.user.name}: ${req.body.content}`);
+const express = require('express');
+const app = express();
+const User = require('./models/user'); // Assuming you have a User model set up
 
-  // insert this message into the database
-  const message = new Message({
-    recipient: req.body.recipient,
-    sender: {
-      _id: req.user._id,
-      name: req.user.name,
-    },
-    content: req.body.content,
-  });
-  message.save();
-});
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {

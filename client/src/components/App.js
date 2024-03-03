@@ -2,23 +2,33 @@ import React, { useState, useEffect } from "react";
 import NavBar from "./modules/NavBar.js";
 import Feed from "./pages/Feed.js";
 import NotFound from "./pages/NotFound.js";
-import Profile from "./pages/Profile.js";
+import Profile from "./modules/Profile.js";
 import Skeleton from "./Skeleton.js";
 import { Routes, Route } from "react-router-dom";
+
+import jwt_decode from "jwt-decode";
+
+import NotFound from "./pages/NotFound.js";
+import Skeleton from "./pages/Skeleton.js";
+
+import "../utilities.css";
 
 import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 
-// to use styles, import the necessary CSS files
-
-import "./App.css";
-
 /**
- * Define the "App" component as a function.
+ * Define the "App" component
  */
+
+require('dotenv').config();
+
+// Now you can require other modules and use the loaded environment variables
+const express = require('express');
+const mongoose = require('mongoose');
+
 const App = () => {
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(undefined);
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
@@ -29,8 +39,10 @@ const App = () => {
     });
   }, []);
 
-  const handleLogin = (res) => {
-    const userToken = res.tokenObj.id_token;
+  const handleLogin = (credentialResponse) => {
+    const userToken = credentialResponse.credential;
+    const decodedCredential = jwt_decode(userToken);
+    console.log(`Logged in as ${decodedCredential.name}`);
     post("/api/login", { token: userToken }).then((user) => {
       setUserId(user._id);
       post("/api/initsocket", { socketid: socket.id });
@@ -38,56 +50,25 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    console.log("Logged out successfully!");
-    setUserId(null);
+    setUserId(undefined);
     post("/api/logout");
   };
 
-  // required method: whatever is returned defines what
-  // shows up on screen
   return (
-    // <> is like a <div>, but won't show
-    // up in the DOM tree
-    <>
-      {/* <NavBar handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} /> */}
-      {/* <div className="App-container">
-        <Router>
-          <Feed path="/" userId={userId} />
-          <Profile path="/profile/:userId" />
-          <Leaderboard path="/leaderboard/:userId" userId={userId} />
-          <Feed path="/feed/" userId={userId} />
-          <Map path="/map/" userId={userId} />
-          <NotFound default />
-        </Router>
-      </div> */}
-      <Routes>
-        <Route path="/" element={<Feed userId={userId}/>}/>
-        <Route path="/profile" element={<Skeleton
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Skeleton
             path="/"
             handleLogin={handleLogin}
             handleLogout={handleLogout}
             userId={userId}
-          />}/>
-        <Route path="/leaderboard" element={<Skeleton
-            path="/"
-            handleLogin={handleLogin}
-            handleLogout={handleLogout}
-            userId={userId}
-          />}/>
-         <Route path="/map" element={<Skeleton
-            path="/"
-            handleLogin={handleLogin}
-            handleLogout={handleLogout}
-            userId={userId}
-          />}/>
-        <Route path="/feed" element={<Skeleton
-            path="/"
-            handleLogin={handleLogin}
-            handleLogout={handleLogout}
-            userId={userId}
-          />}/>
-      </Routes>
-    </>
+          />
+        }
+      />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 

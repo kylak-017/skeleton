@@ -111,10 +111,114 @@ app.use((err, req, res, next) => {
   });
 });
 
+const express = require('express');
+app = express();
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const imgSchema = require('./model.js');
+const fs = require('fs');
+const path = require('path');
+app.set("view engine", "ejs");
+require('dotenv').config();
+
+mongoose.connect(process.env.MONGO_URL)
+.then(() => console.log("DB Connected"));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, 'uploads');
+	},
+	filename: (req, file, cb) => {
+		cb(null, file.fieldname + '-' + Date.now());
+	}
+});
+
+const upload = multer({ storage: storage });
+
+app.get('/', (req, res) => {
+	imgSchema.find({})
+	.then((data) => {
+		res.render('imagepage', {items: data});
+	})
+	.catch((err) => {
+		console.log(err);
+	});
+});
+
+
+app.post('/', upload.single('image'), (req, res) => {
+	const obj = {
+		name: req.body.name,
+		desc: req.body.desc,
+		img: {
+			data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+			contentType: 'image/png'
+		}
+	};
+	imgSchema.create(obj)
+	.then(() => {
+		res.redirect('/');
+	})
+	.catch((err) => {
+		console.log(err);
+	});
+});
+
+port = process.env.PORT || '3000';
+app.listen(port, err => {
+	if (err)
+		throw err;
+	console.log('Server listening on port', port);
+});
+
+
+
+
+
+app.get('/add-participant', (req, res) => {
+  let participants = [];
+
+  const clientId = req.query.clientId;
+  if (clientId) {
+    participants.push(clientId);
+    res.json({ success: true, participants });
+    res.send(participants)
+  } else {
+    res.status(400).json({ success: false, message: 'No clientId provided' });
+  }
+});
+
+
+app.get('/api/leaderboard', (req, res) => {
+  User.find({})
+    .sort({ xp: -1 }) // Sort users by XP in descending order
+    .limit(10) // For example, if you want only the top 10
+    .exec((err, users) => {
+      if (err) {
+        res.status(500).send({ message: 'Error retrieving users' });
+        return;
+      }
+      res.status(200).json(users);
+    });
+});
+
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+
 // hardcode port to 3000 for now
 const port = 3000;
 const server = http.Server(app);
 socketManager.init(server);
+
+
+
 
 server.listen(port, () => {
   console.log(`Server running on port: ${port}`);
