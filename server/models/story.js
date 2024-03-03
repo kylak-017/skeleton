@@ -5,6 +5,9 @@ const StorySchema = new mongoose.Schema({
   creator_id: String,
   creator_name: String,
   content: String,
+  participants: Array,
+  cleanup_date: Date,
+  location: String,
 });
 
 // compile model from schema
